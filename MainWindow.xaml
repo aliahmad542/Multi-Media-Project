@@ -1,0 +1,95 @@
+﻿<Window x:Class="PixelLab.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Image Lab Studio - PixelLab" Height="820" Width="1350"
+        AllowDrop="True" Drop="Window_Drop">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="1.5*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="5">
+                <Image x:Name="MainImage" Stretch="Uniform" MouseLeftButtonDown="MainImage_MouseLeftButtonDown"/>
+            </Border>
+            <StatusBar Grid.Row="1" Margin="0,5,0,0">
+                <StatusBarItem x:Name="TxtImageInfo" Content="No image loaded yet." FontSize="12"/>
+            </StatusBar>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.4*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Row="0" Margin="0,0,0,10">
+                <StackPanel>
+                    <Button Content="Open Image" Height="35" Click="OpenImage_Click" Background="#2196F3" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <Button Content="Reset Original Image" Click="ResetImage_Click" Background="#FF5722" Foreground="White" Margin="0,0,0,10"/>
+
+                    <GroupBox Header="Color Spaces" Margin="0,0,0,10">
+                        <ComboBox x:Name="CboColorSpace" SelectionChanged="CboColorSpace_SelectionChanged" Margin="5">
+                            <ComboBoxItem Content="RGB" IsSelected="True"/>
+                            <ComboBoxItem Content="HSV"/><ComboBoxItem Content="YCbCr"/><ComboBoxItem Content="Lab"/>
+                            <ComboBoxItem Content="YUV"/> <ComboBoxItem Content="CMYK"/>
+                        </ComboBox>
+                    </GroupBox>
+
+                    <GroupBox Header="Channels &amp; Components" Margin="0,0,0,10">
+                        <StackPanel Margin="5">
+                            <Slider x:Name="SliderComponent" Minimum="-100" Maximum="100" Value="0" ValueChanged="SliderComponent_ValueChanged" Margin="0,0,0,5"/>
+                            <CheckBox x:Name="ChkChannel1" Content="Channel 1" IsChecked="True" Checked="Channel_Toggle" Unchecked="Channel_Toggle" Margin="0,0,0,5"/>
+                            <CheckBox x:Name="ChkChannel2" Content="Channel 2" IsChecked="True" Checked="Channel_Toggle" Unchecked="Channel_Toggle" Margin="0,0,0,5"/>
+                            <CheckBox x:Name="ChkChannel3" Content="Channel 3" IsChecked="True" Checked="Channel_Toggle" Unchecked="Channel_Toggle"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Color Quantization" Margin="0,0,0,10">
+                        <StackPanel Margin="5">
+                            <Slider x:Name="SliderColorCount" Minimum="2" Maximum="64" Value="64" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="SliderColorCount_ValueChanged" Margin="0,0,0,5"/>
+                            <TextBlock x:Name="TxtColorCount" Text="64 Colors" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Selected Color Values" Margin="0,0,0,10">
+                        <TextBlock x:Name="TxtColorValues" Text="Click on the image to see 3D sync..." TextWrapping="Wrap" FontSize="12" Foreground="#333" Margin="5"/>
+                    </GroupBox>
+                    
+                    <Button Content="Save Image" Click="SaveImage_Click" Background="#4CAF50" Foreground="White" Height="35"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <GroupBox Grid.Row="1" Header="3D Color Visualization (RGB Cube)">
+                <Grid>
+                    <Viewport3D x:Name="ColorCubeViewport">
+                        <Viewport3D.Camera>
+                            <PerspectiveCamera x:Name="TheCamera" Position="4,4,4" LookDirection="-4,-4,-4" UpDirection="0,1,0" FieldOfView="60"/>
+                        </Viewport3D.Camera>
+                        <ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <Model3DGroup x:Name="CubeModelGroup">
+                                    <AmbientLight Color="#666"/>
+                                    <DirectionalLight Color="White" Direction="-1,-1,-1"/>
+                                </Model3DGroup>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
+                    </Viewport3D>
+
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" Orientation="Horizontal">
+                        <Button Content="Rotate Y" Click="RotateY_Click" Width="60" Margin="2"/>
+                        <Button Content="Rotate X" Click="RotateX_Click" Width="60" Margin="2"/>
+                        <Button Content="Zoom +" Click="ZoomIn_Click" Width="50" Margin="2"/>
+                        <Button Content="Zoom -" Click="ZoomOut_Click" Width="50" Margin="2"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
